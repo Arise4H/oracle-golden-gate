@@ -1,0 +1,10 @@
+gg.handlerlist=cass
+gg.handler.cass.type=cassandra
+gg.handler.cass.mode=op
+gg.handler.cass.contactPoints=cassandra
+gg.handler.cass.keyspace=mykeyspace
+gg.handler.cass.batchSize=100
+gg.handler.cass.username=cassandra
+gg.handler.cass.password=cassandra
+gg.handler.cass.compressedUpdates=true
+gg.classpath=/opt/ogg/dependencies/cassandra-java-driver/*

@@ -1,0 +1,3 @@
+REPLICAT repcass
+TARGETDB LIBFILE libggjava.so SET property=dirprm/cassandra.props
+MAP orcl.mytable, TARGET mykeyspace.mytable;
