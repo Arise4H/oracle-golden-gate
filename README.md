@@ -1,13 +1,7 @@
-# Oracle GoldenGate 23ai Microservices Edition Container Images
-
-Sample container image build files to provide an installation of Oracle GoldenGate for DevOps users.
-These instructions apply to building container images for Oracle GoldenGate version 23ai.
-
 ## Contents
 
 - [Oracle GoldenGate 23ai Microservices Edition Container Images](#oracle-goldengate-23ai-microservices-edition-container-images)
   - [Contents](#contents)
-  - [Before You Start](#before-you-start)
   - [Build an Oracle GoldenGate Container Image](#build-an-oracle-goldengate-container-image)
     - [Changing the Base Image](#changing-the-base-image)
   - [Running Oracle GoldenGate in a Container](#running-oracle-goldengate-in-a-container)
@@ -17,20 +11,8 @@ These instructions apply to building container images for Oracle GoldenGate vers
     - [Running Scripts Before Setup and on Startup](#running-scripts-before-setup-and-on-startup)
   - [Known Issues](#known-issues)
   - [License](#license)
-  - [Copyright](#copyright)
 
-## Before You Start
-
-This project was tested with:
-
-- Oracle GoldenGate 23.4 Microservices for Oracle on Linux x86-64
-- Oracle GoldenGate 23.4 Microservices for PostgreSQL on Linux x86-64
-- Oracle GoldenGate 23.4 Microservices for MSSQL on Linux x86-64
-- Oracle GoldenGate 23.4 Microservices for MYSQL on Linux x86-64
-- Oracle GoldenGate 23.8 Microservices for Distributed Applications and Analytics on Linux x86-64
-
-**IMPORTANT:** You must download the installation binaries of Oracle GoldenGate. You only need to provide the binaries for the version you plan to install. The binaries can be downloaded from the [Oracle Technology Network](https://www.oracle.com/technetwork/middleware/goldengate/downloads/index.html). Do not decompress the Oracle GoldenGate ZIP file. The container build process will handle that
-for you. You also must have Internet connectivity when building the container image for the package manager to perform additional software installations.
+**IMPORTANT:** You must download the installation binaries of Oracle GoldenGate. You only need to provide the binaries for the version you plan to install. The binaries can be downloaded from the [Oracle Technology Network](https://www.oracle.com/technetwork/middleware/goldengate/downloads/index.html).
 
 All shell commands in this document assume the usage of Bash shell.
 
@@ -58,9 +40,7 @@ Similarly, for other Databases like BigData, MySQL, PostgreSQL, etc. provide the
 By default, the base container image used to create the Oracle GoldenGate container image is `oraclelinux:8`. This can be changed using the `BUILD_IMAGE` build argument. For example:
 
 ```sh
-docker build --tag=oracle/goldengate:23.4 \
-             --build-arg BASE_IMAGE="localregistry/oraclelinux:8" \
-             --build-arg INSTALLER=234000_fbo_ggs_Linux_x64_Oracle_services_shiphome.zip .
+podman build --tag=oracle/goldengate:23.4 --build-arg INSTALLER=V1043090-01.zip .
 ```
 
 Oracle GoldenGate 23ai requires a base container image with Oracle Linux 8 or later.
@@ -70,17 +50,7 @@ Oracle GoldenGate 23ai requires a base container image with Oracle Linux 8 or la
 Use the `docker run` command to create and start a container from the Oracle GoldenGate container image.
 
 ```sh
-docker run \
-    --name <container name> \
-    -p <host port>:443 \
-    -e OGG_ADMIN=<admin user name> \
-    -e OGG_ADMIN_PWD=<admin password> \
-    -e OGG_DEPLOYMENT=<deployment name> \
-    -v [<host mount point>:]/u01/ogg/scripts \
-    -v [<host mount point>:]/u02 \
-    -v [<host mount point>:]/u03 \
-    -v [<host mount point>:]/etc/nginx/cert \
-    oracle/goldengate:23.4
+podman run -d --name ogg-server -p 8443:443 -e OGG_ADMIN=oggadmin -e OGG_ADMIN_PWD=Password123! -e OGG_DEPLOYMENT=MyOGGDeployment -v /home/gtiwari/ogg/scripts:/u01/ogg/scripts -v /home/gtiwari/ogg/data:u02 -v /home/gtiwari/ogg/tmp:/u03 -v /home/gtiwari/ogg/certs:/etc/nginx/cert oracle/goldengate-revised:23.4
 ```
 
 Parameters:
@@ -181,7 +151,3 @@ None
 All scripts and files hosted in this project and GitHub [docker-images/OracleGoldenGate](../) repository required to build the container images are, unless otherwise noted, released under the Universal Permissive License (UPL), Version 1.0.  See [LICENSE](/LICENSE) for details.
 
 To download and run Oracle GoldenGate, regardless of whether inside or outside a container, you must download the binaries from the [Oracle Technology Network](https://www.oracle.com/technetwork/middleware/goldengate/downloads/index.html) and accept the license indicated on that page.
-
-## Copyright
-
-Copyright &copy; 2022, 2024 Oracle and/or its affiliates.
